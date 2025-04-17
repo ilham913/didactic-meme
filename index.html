@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Power Sequence Checker</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; background: #f2f2f2; }
+    input, button { padding: 8px; margin: 5px; }
+    .output { margin-top: 20px; padding: 10px; background: #fff; border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <h2>Power Sequence Checker</h2>
+  <label>Base Number: <input type="number" id="base" value="25162" /></label><br>
+  <label>Exponent: <input type="number" id="exponent" step="0.00000000000001" value="2.63422004121835" /></label><br>
+  <button onclick="checkPower()">Check</button>
+
+  <div class="output" id="output"></div>
+
+  <script>
+    function checkPower() {
+      const base = parseFloat(document.getElementById('base').value);
+      const exp = parseFloat(document.getElementById('exponent').value);
+      const result = Math.pow(base, exp);
+      const numberStr = Math.round(result).toString();
+
+      const output = document.getElementById('output');
+
+      if (numberStr[0] === '0') {
+        output.innerHTML = `Число начинается с 0: ${numberStr}`;
+        return;
+      }
+
+      if (numberStr.length < 12 || numberStr.length > 14) {
+        output.innerHTML = `Длина числа не в диапазоне 12–14: ${numberStr}`;
+        return;
+      }
+
+      const digits = [];
+      for (let i = 0; i < numberStr.length; i++) {
+        let d = parseInt(numberStr[i]);
+        if (d < 1 || d > 20) {
+          output.innerHTML = `Цифра вне диапазона 1–20: ${d}`;
+          return;
+        }
+        digits.push(d);
+      }
+
+      const mid = Math.floor(digits.length / 2);
+      const firstHalf = digits.slice(0, mid);
+      const secondHalf = digits.slice(mid);
+
+      const isIncreasing = arr => arr.join('') === [...arr].sort((a, b) => a - b).join('');
+
+      if (isIncreasing(firstHalf) && isIncreasing(secondHalf)) {
+        output.innerHTML = `<b>Подходит:</b> ${numberStr}`;
+      } else {
+        output.innerHTML = `Число не соответствует структуре: ${numberStr}`;
+      }
+    }
+  </script>
+</body>
+</html>
